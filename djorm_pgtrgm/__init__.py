@@ -1,3 +1,4 @@
+from django.core.exceptions import ImproperlyConfigured
 from django.db import connection
 from django.db import models
 from django.db.models.fields import Field, subclassing
@@ -9,7 +10,7 @@ except ImportError:
     from django.db.models.sql.constants import QUERY_TERMS
 try:
     from django.contrib.gis.db.models.lookups import gis_lookups as ALL_TERMS
-except ImportError:
+except ImproperlyConfigured:
     from django.contrib.gis.db.models.sql.query import ALL_TERMS
 
 
