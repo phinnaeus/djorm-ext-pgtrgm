@@ -1,4 +1,3 @@
-from django.core.exceptions import ImproperlyConfigured
 from django.db import connection
 from django.db import models
 from django.db.models.fields import Field, subclassing
@@ -8,13 +7,8 @@ try:
     from django.db.models import Lookup
 except ImportError:
     from django.db.models.sql.constants import QUERY_TERMS
-try:
-    from django.contrib.gis.db.models.lookups import gis_lookups as ALL_TERMS
-except ImproperlyConfigured:
-    from django.contrib.gis.db.models.sql.query import ALL_TERMS
 
-
-db_backends_allowed = ('postgresql', 'postgis')
+db_backends_allowed = ('postgresql')
 
 
 def get_prep_lookup(self, lookup_type, value):
@@ -67,12 +61,6 @@ elif backend_allowed:
         QUERY_TERMS.add('similar')
     else:
         QUERY_TERMS['similar'] = None
-
-    if backend_allowed == 'postgis':
-        if isinstance(ALL_TERMS, set):
-            ALL_TERMS.add('similar')
-        else:
-            ALL_TERMS['similar'] = None
 
     connection.operators['similar'] = "%%%% %s"
 
